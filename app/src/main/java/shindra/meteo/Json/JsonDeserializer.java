@@ -3,18 +3,21 @@ package shindra.meteo.Json;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 import shindra.meteo.City.City;
-import shindra.meteo.City.Main;
-import shindra.meteo.City.Weather.Weather;
+import shindra.meteo.City.Internal.Clouds;
+import shindra.meteo.City.Internal.Coordinates;
+import shindra.meteo.City.Internal.Main;
+import shindra.meteo.City.Internal.RainVolume;
+import shindra.meteo.City.Internal.SnowVolume;
+import shindra.meteo.City.Internal.Sys;
+import shindra.meteo.City.Internal.Wind;
 
 /**
  * Created by Guillaume on 08/11/2016.
@@ -22,39 +25,60 @@ import shindra.meteo.City.Weather.Weather;
 
 public class JsonDeserializer implements JsonFetcher.FetcherCallBack {
 
-     private Thread aJsonThread;
+    private Thread aJsonThread;
     private Gson gson;
+    private DeserializerCallBack myCallBack;
 
-    public JsonDeserializer(){
+    public JsonDeserializer() {
         gson = new Gson();
     }
 
-    public void getData(URL aUrl){
-            aJsonThread = new Thread(new JsonFetcher(this,aUrl));
-            aJsonThread.start();
+    public void getData(DeserializerCallBack aCallback, URL aUrl) {
+        aJsonThread = new Thread(new JsonFetcher(this, aUrl));
+        aJsonThread.start();
+        myCallBack = aCallback;
     }
 
     @Override
     public void JsonObjectAvailable(JSONObject JsonFetched) {
         Log.d("JsonFile in call back", JsonFetched.toString());
 
-        //City aCity = gson.fromJson(JsonFetched.toString(),City.class) ;
-        City aCity = deserializeGeneric(City.class, JsonFetched);
-        Main aMain = deserializeGeneric(Main.class, JsonFetched);
+        try {
+            City aCity = deserializeGeneric(City.class, JsonFetched, null);
+            aCity.setCoordinates(deserializeGeneric(Coordinates.class, JsonFetched, "coord"));
+            aCity.setMain(deserializeGeneric(Main.class, JsonFetched, "main"));
+            aCity.setWind(deserializeGeneric(Wind.class, JsonFetched, "wind"));
+            aCity.setClouds(deserializeGeneric(Clouds.class, JsonFetched, "clouds"));
+            aCity.setRainVolume(deserializeGeneric(RainVolume.class, JsonFetched, "rain"));
+            aCity.setSnowVolume(deserializeGeneric(SnowVolume.class, JsonFetched, "snow"));
+            aCity.setSys(deserializeGeneric(Sys.class, JsonFetched, "sys"));
 
+            myCallBack.cityAvailable(aCity);
 
-        Log.d("CityName", aCity.geName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private <T> T deserializeGeneric(Class<T> clazz, JSONObject aJsonObject, String objectTittle) throws JSONException {
+        if (objectTittle == null) return gson.fromJson(aJsonObject.toString(), clazz);
+
+        /*Check if the key is in the Json*/
+        if (!aJsonObject.has(objectTittle)) return null;  /*no, return null*/
+
+        /*Parse the key to obtain the JsonObject of the key*/
+        JSONObject current = aJsonObject.getJSONObject(objectTittle);
+        Log.d("deserializeGeneric", current.toString());
+        return gson.fromJson(current.toString(), clazz); /*Return the deserialize object*/
 
     }
 
-    private <T> T deserializeGeneric(Class<T> clazz,JSONObject aJsonObject){
-
-        return (T) gson.fromJson(aJsonObject.toString(),clazz) ;
-
-    }
-
-    private <T>  T deserializeArrayGeneric (TypeToken aToken){
+    private <T> T deserializeArrayGeneric(TypeToken aToken, JSONObject aJsonObject, String arrayObjectTittle) {
 
         return null;
+    }
+
+    public interface DeserializerCallBack {
+        void cityAvailable(City aCity);
     }
 }

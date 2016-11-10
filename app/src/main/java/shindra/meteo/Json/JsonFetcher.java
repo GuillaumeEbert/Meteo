@@ -65,8 +65,6 @@ public class JsonFetcher implements Runnable {
 
     }
 
-
-
     public interface FetcherCallBack{
         void JsonObjectAvailable(JSONObject JsonFetched);
 

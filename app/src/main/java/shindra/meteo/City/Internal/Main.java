@@ -1,4 +1,4 @@
-package shindra.meteo.City;
+package shindra.meteo.City.Internal;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
 public class Main {
 
     @SerializedName("temp")
-    private double aTemperatureMetric;
+    private double aTemperature;
     @SerializedName("pressure")
     private int aPressure;
     @SerializedName("humidity")
     private int aHumidityPercent;
-    @SerializedName("temp_mini")
-    private double aTempMiniMetric;
-    @SerializedName("temp_Max")
-    private double aTempMaxMetric;
+    @SerializedName("temp_min")
+    private double aTempMini;
+    @SerializedName("temp_max")
+    private double aTempMax;
 }

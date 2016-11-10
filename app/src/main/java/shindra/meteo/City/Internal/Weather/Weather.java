@@ -1,4 +1,4 @@
-package shindra.meteo.City.Weather;
+package shindra.meteo.City.Internal.Weather;
 
 import com.google.gson.annotations.SerializedName;
 
