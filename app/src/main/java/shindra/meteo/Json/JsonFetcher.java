@@ -1,5 +1,8 @@
 package shindra.meteo.Json;
 
+import android.os.Handler;
+import android.os.Message;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -7,18 +10,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import shindra.meteo.City.CityBuilder;
+
 /**
  * Created by Guillaume on 08/11/2016.
  */
 
 public class JsonFetcher implements Runnable {
-     private FetcherCallBack callBack;
-     private URL url2Connect;
+     private Handler myCityBuilderHandler;
+     private URL myUrl2Connect;
 
-    public JsonFetcher(FetcherCallBack aCallBack, URL aUrl){
-        callBack = aCallBack;
-        url2Connect = aUrl;
+    public JsonFetcher(Handler aCityBuilderHandler, URL url2Connect){
+        myCityBuilderHandler = aCityBuilderHandler;
+        myUrl2Connect = url2Connect;
+
     }
+
+
+
 
 
     /**
@@ -33,9 +42,10 @@ public class JsonFetcher implements Runnable {
         String line = null;
         JSONObject aJsonObject;
 
+
         try{
 
-            HttpURLConnection connection = (HttpURLConnection) url2Connect.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) myUrl2Connect.openConnection();
             connection.setRequestMethod("GET");
 
             connection.setConnectTimeout(2000);
@@ -54,19 +64,18 @@ public class JsonFetcher implements Runnable {
 
             bufferedReader.close();
 
-            aJsonObject = new JSONObject(stringBuilder.toString());
+            aJsonObject = new JSONObject((stringBuilder.toString()));
 
-            callBack.JsonObjectAvailable(aJsonObject); /* Raise callback*/
+            /*Send Json file to cityBuilder*/
+            myCityBuilderHandler.obtainMessage(CityBuilder.JSON_READY,aJsonObject).sendToTarget();
 
 
-        }catch (Exception E){
-            //TODO
+        }catch (Exception e){
+            e.printStackTrace();
+             /*Send Exception file to cityBuilder*/
+            myCityBuilderHandler.obtainMessage(CityBuilder.JSON_READY,e).sendToTarget();
         }
 
     }
 
-    public interface FetcherCallBack{
-        void JsonObjectAvailable(JSONObject JsonFetched);
-
-    }
 }

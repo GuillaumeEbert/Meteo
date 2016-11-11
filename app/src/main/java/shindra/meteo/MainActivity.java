@@ -1,5 +1,7 @@
 package shindra.meteo;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,28 +12,30 @@ import shindra.meteo.City.City;
 import shindra.meteo.Json.JsonDeserializer;
 import shindra.meteo.UrlBuilder.UrlBuilder;
 
-public class MainActivity extends AppCompatActivity implements  JsonDeserializer.DeserializerCallBack  {
+public class MainActivity extends AppCompatActivity implements CitiesManager.CitiesManagerCallback {
+
+    private CitiesManager myCitiesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        JsonDeserializer test = new JsonDeserializer();
-        UrlBuilder myUrlBuilder = new UrlBuilder();
-
-        String urlImgTest = "http://openweathermap.org/img/w/10d.png";
+        myCitiesManager = new CitiesManager(this);
 
         try {
-            test.getData(this,myUrlBuilder.buildUrl("hji","france"));
+            myCitiesManager.buildCity("Strasbourg", "France");
+            myCitiesManager.buildCity("Paris", "France");
+            myCitiesManager.buildCity("Lyon", "France");
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
     }
 
-    /*Call when aCity is available from a Json*/
     @Override
-    public void cityAvailable(City aCity) {
-        Log.d("City available", aCity.toString());
+    public void newCityAvailable() {
+        Log.d("GUI","City available");
     }
 }

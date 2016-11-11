@@ -1,8 +1,9 @@
 package shindra.meteo.City;
 
+import android.graphics.Bitmap;
 import com.google.gson.annotations.SerializedName;
-
 import java.lang.*;
+import java.util.ArrayList;
 
 import shindra.meteo.City.Internal.Clouds;
 import shindra.meteo.City.Internal.Coordinates;
@@ -10,12 +11,13 @@ import shindra.meteo.City.Internal.Main;
 import shindra.meteo.City.Internal.RainVolume;
 import shindra.meteo.City.Internal.SnowVolume;
 import shindra.meteo.City.Internal.Sys;
+import shindra.meteo.City.Internal.Weather;
 import shindra.meteo.City.Internal.Wind;
+
 
 /**
  * Created by Guillaume on 08/11/2016.
  */
-
 public class City {
     private Sys mySys;
     private Main myMain;
@@ -24,6 +26,7 @@ public class City {
     private RainVolume myRainVolume;
     private SnowVolume mySnowVolume;
     private Coordinates myCoordinates;
+    private ArrayList<Weather> myWeathers;
 
     @SerializedName("visibility")
     private int myVisibility;
@@ -58,7 +61,6 @@ public class City {
         return myId;
     }
 
-
     public void setCoordinates(Coordinates myCoordinates) {
         this.myCoordinates = myCoordinates;
     }
@@ -66,7 +68,6 @@ public class City {
     public void setMain(Main myMain) {
         this.myMain = myMain;
     }
-
 
     public Wind getWind() {
         return myWind;
@@ -107,5 +108,19 @@ public class City {
     public void setSys(Sys mySys) {
         this.mySys = mySys;
     }
+
+    public ArrayList<Weather> getMyWeathers() {
+        return myWeathers;
+    }
+
+    public void setMyWeathers(ArrayList<Weather> myWeathers) {
+        this.myWeathers = myWeathers;
+    }
+
+    public void iconAvailable(Bitmap aIcon) {
+        myWeathers.get(0).setIconImg(aIcon);
+
+    }
+
 
 }

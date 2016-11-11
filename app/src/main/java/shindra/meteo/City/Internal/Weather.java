@@ -1,4 +1,6 @@
-package shindra.meteo.City.Internal.Weather;
+package shindra.meteo.City.Internal;
+
+import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -16,6 +18,16 @@ public class Weather {
     String myDescription;
     @SerializedName("icon")
     String myIconId;
+
+    public Bitmap getIconImg() {
+        return myIconImg;
+    }
+
+    public void setIconImg(Bitmap myIconImg) {
+        this.myIconImg = myIconImg;
+    }
+
+    Bitmap myIconImg;
 
     public int getId() {
         return myId;
