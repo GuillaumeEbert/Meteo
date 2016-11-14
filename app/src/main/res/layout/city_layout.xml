@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Strasbourg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_city_name"
+        android:layout_marginTop="117dp"
+        android:typeface="normal"
+        android:textSize="24sp"
+        android:textAllCaps="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="dim.13 novembre 14:28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_date"
+        android:layout_below="@+id/tv_city_name"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/sym_def_app_icon"
+        android:id="@+id/iv_weather_icon"
+        android:layout_below="@+id/tv_date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:scaleType="matrix"
+        android:saveEnabled="false"
+        android:scaleX="4"
+        android:scaleY="4" />
+
+
+
+</RelativeLayout>

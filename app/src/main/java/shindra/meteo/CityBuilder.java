@@ -1,17 +1,18 @@
-package shindra.meteo.City;
+package shindra.meteo;
 
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import shindra.meteo.CitiesManager;
-import shindra.meteo.IconFetcher;
+import shindra.meteo.City.City;
+import shindra.meteo.City.IconFetcher;
 import shindra.meteo.Json.JsonDeserializer;
 import shindra.meteo.Json.JsonFetcher;
 import shindra.meteo.UrlBuilder.UrlBuilder;
@@ -24,6 +25,8 @@ public class CityBuilder implements Handler.Callback {
     private Handler myHandler;
     private UrlBuilder myUrlBuilder;
     private CityBuilderCallback myCallBack;
+    private Queue<URL> qUrl;
+    private boolean isFetcherWorking;
 
     public static final int JSON_READY = 0;
     public static final int DESERIALIZER_FINISH = 1;
@@ -36,18 +39,33 @@ public class CityBuilder implements Handler.Callback {
         myHandler = new Handler(this);
         myUrlBuilder = new UrlBuilder();
         myCallBack = aCallBack;
+        qUrl = new LinkedBlockingQueue<URL>();
+        isFetcherWorking = false;
     }
 
     public void buildCity(String cityName, String cityCountry) throws MalformedURLException {
+
         //Build Json Url
         URL theUrl2Connect = myUrlBuilder.buildUrl(cityName, cityCountry);
-
-        //Launch JsonFetcher
-        JsonFetcher myJsonFetcher = new JsonFetcher(myHandler, theUrl2Connect);
-        new Thread(myJsonFetcher).start();
-
+        if(isFetcherWorking) qUrl.add(theUrl2Connect);
+        else initJsonFetcherThread(theUrl2Connect);
 
     }
+
+    public void buildCity(String id) throws MalformedURLException {
+        //Build Json Url
+        URL theUrl2Connect = myUrlBuilder.buildUrl(id);
+        if(isFetcherWorking) qUrl.add(theUrl2Connect);
+        else initJsonFetcherThread(theUrl2Connect);
+    }
+
+    private void initJsonFetcherThread(URL urlToConnect){
+        isFetcherWorking = true;
+        JsonFetcher myJsonFetcher = new JsonFetcher(myHandler, urlToConnect);
+        new Thread(myJsonFetcher).start();
+
+    }
+
 
     @Override
     public boolean handleMessage(Message inputMessage) {
@@ -58,6 +76,9 @@ public class CityBuilder implements Handler.Callback {
                 /* Json file is here*/
                 JSONObject jSonFile = (JSONObject) inputMessage.obj;
 
+                Log.d("JsonReceived", jSonFile.toString());
+
+                isFetcherWorking = false;
                 /*Launch deserializer*/
                 JsonDeserializer myDeserializer = new JsonDeserializer(myHandler, jSonFile);
                 new Thread(myDeserializer).start();
@@ -76,6 +97,9 @@ public class CityBuilder implements Handler.Callback {
             case ICONS_FETCHED:
                 City aCompleteCity = (City) inputMessage.obj;
                 myCallBack.cityConstructed(aCompleteCity);
+
+                if(!qUrl.isEmpty() && !isFetcherWorking) initJsonFetcherThread(qUrl.poll());
+
                 break;
 
             case JSON_FETCHER_EXCEPTION:

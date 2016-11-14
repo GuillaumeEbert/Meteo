@@ -1,14 +1,7 @@
 package shindra.meteo.UrlBuilder;
 
-import java.io.StringBufferInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-
-import shindra.meteo.City.City;
-import shindra.meteo.City.Internal.Weather;
-import shindra.meteo.Json.JsonDeserializer;
-import shindra.meteo.Json.JsonFetcher;
 
 /**
  * Created by Guillaume on 08/11/2016.
@@ -17,17 +10,19 @@ import shindra.meteo.Json.JsonFetcher;
 public class UrlBuilder {
 
     private static final String API_KEY = "22b96bd76e2df6d151db1dba669fc1e6";
-    private static final String URL_START = "http://api.openweathermap.org/data/2.5/weather?q=";
+    private static final String URL_START = "http://api.openweathermap.org/data/2.5/weather?";
     private static final String URL_ICON_START = "http://openweathermap.org/img/w/";
     private static final String URL_ICON_STOP = ".png";
 
     public URL buildUrl(String cityName, String cityCountry) throws MalformedURLException {
-
-
-        String Url = URL_START + firstChar2UpperCase(cityName) + "," + firstChar2UpperCase(cityCountry) + "&APPID=" + API_KEY;
-
+        String Url = URL_START + "q=" +firstChar2UpperCase(cityName) + "," + firstChar2UpperCase(cityCountry) + "&APPID=" + API_KEY;
         return new URL(Url);
 
+    }
+
+    public URL buildUrl(String cityID) throws MalformedURLException{
+        String Url = URL_START + "id=" +cityID + "&APPID=" + API_KEY;
+        return new URL(Url);
     }
 
     public URL buildIconUrl(String sIconID) throws MalformedURLException {

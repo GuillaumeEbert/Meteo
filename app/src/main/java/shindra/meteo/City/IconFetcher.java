@@ -1,19 +1,14 @@
-package shindra.meteo;
+package shindra.meteo.City;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
-import shindra.meteo.City.City;
-import shindra.meteo.City.CityBuilder;
 import shindra.meteo.City.Internal.Weather;
+import shindra.meteo.CityBuilder;
 import shindra.meteo.UrlBuilder.UrlBuilder;
 
 /**

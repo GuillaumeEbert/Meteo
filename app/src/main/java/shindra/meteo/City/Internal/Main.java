@@ -11,7 +11,7 @@ public class Main {
     @SerializedName("temp")
     private double aTemperature;
     @SerializedName("pressure")
-    private int aPressure;
+    private double aPressure;
     @SerializedName("humidity")
     private int aHumidityPercent;
     @SerializedName("temp_min")

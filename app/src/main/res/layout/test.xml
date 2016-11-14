@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:srcCompat="@android:drawable/ic_dialog_email"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="14dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp" />
+
+    <Button
+        android:text="@string/btn_view_cities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_view_cities"
+        android:background="@android:color/transparent"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/fab" />
+
+    <Button
+        android:text="@string/btn_add_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_add_city"
+        android:background="@android:color/transparent"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/btn_view_cities" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_mylocation"
+        android:id="@+id/imageButton"
+        android:background="@android:color/transparent"
+        android:layout_marginEnd="30dp"
+        android:layout_alignBottom="@+id/btn_add_city"
+        android:layout_toStartOf="@+id/btn_add_city" />
+
+</RelativeLayout>

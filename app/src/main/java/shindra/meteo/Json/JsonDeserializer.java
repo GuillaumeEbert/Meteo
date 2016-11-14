@@ -1,8 +1,6 @@
 package shindra.meteo.Json;
 
 import android.os.Handler;
-import android.os.Message;
-import android.provider.Contacts;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,12 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import shindra.meteo.City.City;
-import shindra.meteo.City.CityBuilder;
+import shindra.meteo.CityBuilder;
 import shindra.meteo.City.Internal.Clouds;
 import shindra.meteo.City.Internal.Coordinates;
 import shindra.meteo.City.Internal.Main;

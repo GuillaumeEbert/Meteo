@@ -1,7 +1,6 @@
 package shindra.meteo.Json;
 
 import android.os.Handler;
-import android.os.Message;
 
 import org.json.JSONObject;
 
@@ -10,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import shindra.meteo.City.CityBuilder;
+import shindra.meteo.CityBuilder;
 
 /**
  * Created by Guillaume on 08/11/2016.
@@ -26,10 +25,6 @@ public class JsonFetcher implements Runnable {
 
     }
 
-
-
-
-
     /**
      * Fetch the Json Object from the url passed in the constructor.
      * Raise callback once the Json Object is fetched
@@ -41,7 +36,6 @@ public class JsonFetcher implements Runnable {
         StringBuilder stringBuilder = null;
         String line = null;
         JSONObject aJsonObject;
-
 
         try{
 
