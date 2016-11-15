@@ -1,5 +1,8 @@
 package shindra.meteo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import shindra.meteo.UI.GUI.GUI;
  * Created by Guillaume on 11/11/2016.
  */
 
-public class CitiesManager implements CityBuilder.CityBuilderCallback, Serializable {
+public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelable {
 
     private ArrayList<City> lCity;
     private CityBuilder myCityBuilder;
@@ -22,10 +25,26 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Serializa
 
     public CitiesManager(GUI aGui, Loader aLoader) {
         lCity = new ArrayList<City>();
-        myCityBuilder = new CityBuilder(this);
+        myCityBuilder = new CityBuilder(this, aGui.getResources());
         theGui = aGui;
         theLoader = aLoader;
     }
+
+    protected CitiesManager(Parcel in) {
+        lCity = in.createTypedArrayList(City.CREATOR);
+    }
+
+    public static final Creator<CitiesManager> CREATOR = new Creator<CitiesManager>() {
+        @Override
+        public CitiesManager createFromParcel(Parcel in) {
+            return new CitiesManager(in);
+        }
+
+        @Override
+        public CitiesManager[] newArray(int size) {
+            return new CitiesManager[size];
+        }
+    };
 
     public void buildCity(String cityName, String cityCountry) throws MalformedURLException {
         myCityBuilder.buildCity(cityName, cityCountry);
@@ -88,9 +107,18 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Serializa
         myCallback = aListener;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(lCity);
+    }
+
     public interface CitiesManagerCallback {
         void newCityAvailable(City newCityBuild);
-
         void loadingCompleted();
     }
 }

@@ -1,6 +1,9 @@
 package shindra.meteo.City.Internal;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,16 +11,51 @@ import com.google.gson.annotations.SerializedName;
  * Created by Guillaume on 08/11/2016.
  */
 
-public class Weather {
+public class Weather implements Parcelable {
 
     @SerializedName("id")
     int myId;
     @SerializedName("main")
-    String myMainWeather;
+    private String myMainWeather;
     @SerializedName("description")
-    String myDescription;
+    private String myDescription;
     @SerializedName("icon")
-    String myIconId;
+    private String myIconId;
+    private Bitmap myIconImg;
+
+    protected Weather(Parcel in) {
+        myId = in.readInt();
+        myMainWeather = in.readString();
+        myDescription = in.readString();
+        myIconId = in.readString();
+        myIconImg = in.readParcelable(Bitmap.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(myId);
+        dest.writeString(myMainWeather);
+        dest.writeString(myDescription);
+        dest.writeString(myIconId);
+        dest.writeParcelable(myIconImg, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
+        @Override
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        @Override
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
 
     public Bitmap getIconImg() {
         return myIconImg;
@@ -26,8 +64,6 @@ public class Weather {
     public void setIconImg(Bitmap myIconImg) {
         this.myIconImg = myIconImg;
     }
-
-    Bitmap myIconImg;
 
     public int getId() {
         return myId;

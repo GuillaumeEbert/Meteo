@@ -1,5 +1,6 @@
 package shindra.meteo;
 
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -27,20 +28,21 @@ public class CityBuilder implements Handler.Callback {
     private CityBuilderCallback myCallBack;
     private Queue<URL> qUrl;
     private boolean isFetcherWorking;
+    private IconFetcher myIconFetcher;
 
     public static final int JSON_READY = 0;
     public static final int DESERIALIZER_FINISH = 1;
-    public static final int ICONS_FETCHED = 2;
     public static final int JSON_FETCHER_EXCEPTION = 10;
     public static final int DESERIALIZER_EXCEPTION = 11;
-    public static final int ICON_FETCHER_EXCEPTION = 12;
 
-    public CityBuilder(CityBuilderCallback aCallBack) {
+
+    public CityBuilder(CityBuilderCallback aCallBack, Resources appResources) {
         myHandler = new Handler(this);
         myUrlBuilder = new UrlBuilder();
         myCallBack = aCallBack;
         qUrl = new LinkedBlockingQueue<URL>();
         isFetcherWorking = false;
+        myIconFetcher = new IconFetcher(appResources);
     }
 
     public void buildCity(String cityName, String cityCountry) throws MalformedURLException {
@@ -89,16 +91,11 @@ public class CityBuilder implements Handler.Callback {
                 /*City is Here*/
                 City anIncompleteCity = (City) inputMessage.obj;
 
-                /*Start the icon Fetcher*/
-                IconFetcher myIconFetcher = new IconFetcher(myHandler, anIncompleteCity, myUrlBuilder);
-                new Thread(myIconFetcher).start();
-                break;
-
-            case ICONS_FETCHED:
-                City aCompleteCity = (City) inputMessage.obj;
-                myCallBack.cityConstructed(aCompleteCity);
+                anIncompleteCity.getWeathers().setIconImg( myIconFetcher.getWeatherIcon(anIncompleteCity.getWeathers().getIconId()));
 
                 if(!qUrl.isEmpty() && !isFetcherWorking) initJsonFetcherThread(qUrl.poll());
+
+                myCallBack.cityConstructed(anIncompleteCity);
 
                 break;
 
@@ -108,8 +105,6 @@ public class CityBuilder implements Handler.Callback {
             case DESERIALIZER_EXCEPTION:
                 break;
 
-            case ICON_FETCHER_EXCEPTION:
-                break;
 
         }
 

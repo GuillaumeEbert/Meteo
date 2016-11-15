@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_ui_search_city"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="shindra.meteo.UI.GUI.UiSearchCity.UiSearchCity">
+
+        <EditText
+            android:id="@+id/et_city_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".7"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:layout_alignBaseline="@+id/tv_entry_city_name"
+            android:layout_alignBottom="@+id/tv_entry_city_name"
+            android:layout_toEndOf="@+id/tv_entry_city_name" />
+
+        <TextView
+            android:text="@string/city_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_entry_city_country"
+            android:layout_marginTop="58dp"
+            android:layout_below="@+id/et_city_name"
+            android:layout_alignStart="@+id/tv_entry_city_name"
+            android:textColor="@android:color/background_dark" />
+
+        <EditText
+            android:id="@+id/et_city_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".7"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:layout_alignBaseline="@+id/tv_entry_city_country"
+            android:layout_alignBottom="@+id/tv_entry_city_country"
+            android:layout_alignStart="@+id/et_city_name" />
+
+        <TextView
+            android:text="@string/dialog_add_city_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:id="@+id/textView3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:text="@string/city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:id="@+id/tv_entry_city_name"
+            android:layout_below="@+id/textView3"
+            android:layout_alignStart="@+id/textView3"
+            android:layout_marginStart="32dp"
+            android:textColor="@android:color/background_dark" />
+
+        <Button
+            android:text="Ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_dialog_ok"
+            android:layout_marginTop="18dp"
+            android:layout_below="@+id/et_city_country"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:text="@string/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_dialog_cancel"
+            android:layout_alignBaseline="@+id/btn_dialog_ok"
+            android:layout_alignBottom="@+id/btn_dialog_ok"
+            android:layout_toEndOf="@+id/tv_entry_city_country" />
+
+
+</RelativeLayout>

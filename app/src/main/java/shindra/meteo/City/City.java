@@ -1,32 +1,27 @@
 package shindra.meteo.City;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import java.lang.*;
-import java.util.ArrayList;
 
-import shindra.meteo.City.Internal.Clouds;
+
 import shindra.meteo.City.Internal.Coordinates;
 import shindra.meteo.City.Internal.Main;
-import shindra.meteo.City.Internal.RainVolume;
-import shindra.meteo.City.Internal.SnowVolume;
 import shindra.meteo.City.Internal.Sys;
 import shindra.meteo.City.Internal.Weather;
-import shindra.meteo.City.Internal.Wind;
 
 
 /**
  * Created by Guillaume on 08/11/2016.
  */
-public class City {
+public class City implements Parcelable{
     private Sys mySys;
     private Main myMain;
-    private Wind myWind;
-    private Clouds myClouds;
-    private RainVolume myRainVolume;
-    private SnowVolume mySnowVolume;
     private Coordinates myCoordinates;
-    private ArrayList<Weather> myWeathers;
+    private Weather myWeathers;
 
     @SerializedName("visibility")
     private int myVisibility;
@@ -37,12 +32,30 @@ public class City {
     @SerializedName("cod")
     private int myCod;
 
-    public String geName() {
-        return myName;
+
+    protected City(Parcel in) {
+        myMain = in.readParcelable(Main.class.getClassLoader());
+        myWeathers = in.readParcelable(Weather.class.getClassLoader());
+        myVisibility = in.readInt();
+        myId = in.readInt();
+        myName = in.readString();
+        myCod = in.readInt();
     }
 
-    public int getMyCod() {
-        return myCod;
+    public static final Creator<City> CREATOR = new Creator<City>() {
+        @Override
+        public City createFromParcel(Parcel in) {
+            return new City(in);
+        }
+
+        @Override
+        public City[] newArray(int size) {
+            return new City[size];
+        }
+    };
+
+    public String geName() {
+        return myName;
     }
 
     public Coordinates getCoordinates() {
@@ -51,10 +64,6 @@ public class City {
 
     public Main getMain() {
         return myMain;
-    }
-
-    public int getVisibility() {
-        return myVisibility;
     }
 
     public int getId() {
@@ -69,38 +78,6 @@ public class City {
         this.myMain = myMain;
     }
 
-    public Wind getWind() {
-        return myWind;
-    }
-
-    public void setWind(Wind myWind) {
-        this.myWind = myWind;
-    }
-
-    public Clouds getClouds() {
-        return myClouds;
-    }
-
-    public void setClouds(Clouds myClouds) {
-        this.myClouds = myClouds;
-    }
-
-    public RainVolume getRainVolume() {
-        return myRainVolume;
-    }
-
-    public void setRainVolume(RainVolume myRainVolume) {
-        this.myRainVolume = myRainVolume;
-    }
-
-    public SnowVolume getSnowVolume() {
-        return mySnowVolume;
-    }
-
-    public void setSnowVolume(SnowVolume mySnowVolume) {
-        this.mySnowVolume = mySnowVolume;
-    }
-
     public Sys getSys() {
         return mySys;
     }
@@ -109,18 +86,35 @@ public class City {
         this.mySys = mySys;
     }
 
-    public ArrayList<Weather> getMyWeathers() {
+    public Weather getWeathers() {
         return myWeathers;
     }
 
-    public void setMyWeathers(ArrayList<Weather> myWeathers) {
+    public void setMyWeathers(Weather myWeathers) {
         this.myWeathers = myWeathers;
     }
 
-    public void iconAvailable(Bitmap aIcon) {
-        myWeathers.get(0).setIconImg(aIcon);
+    public int getTemperature(){
+        return myMain.getTemperature().intValue() ;
+    }
 
+    public int getHumidityPercent(){
+        return myMain.getHumidityPercent();
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(myMain, flags);
+        dest.writeParcelable(myWeathers, flags);
+        dest.writeInt(myVisibility);
+        dest.writeInt(myId);
+        dest.writeString(myName);
+        dest.writeInt(myCod);
+    }
 }

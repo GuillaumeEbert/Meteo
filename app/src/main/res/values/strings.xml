@@ -5,7 +5,35 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name ="btn_add_city">Ajouter</string>
-    <string name ="btn_view_cities">Villes</string>
+    <string name="btn_add_city">Ajouter</string>
+    <string name="btn_view_cities">Villes</string>
+
+    <string name="dialog_add_city_tittle">Ajouter une ville</string>
+    <string name="city_name"> Nom : </string>
+    <string name="city_country"> Pays : </string>
+
+    <string name="btn_cancel">Annuler</string>
+
+    <string name="mon">lun</string>
+    <string name="thu">mar</string>
+    <string name="wen">mer</string>
+    <string name="thur">jeu</string>
+    <string name="fri">ven</string>
+    <string name="sat">sam</string>
+    <string name="sun">dim</string>
+
+    <string name="jan">janvier</string>
+    <string name="feb">fevrier</string>
+    <string name="mar">mars</string>
+    <string name="apr">avril</string>
+    <string name="may">mai</string>
+    <string name="jun">juin</string>
+    <string name="jul">juillet</string>
+    <string name="aug">aout</string>
+    <string name="sep">septembre</string>
+    <string name="oct">octobre</string>
+    <string name="nov">novembre</string>
+    <string name="dec">decembre</string>
+
 
 </resources>

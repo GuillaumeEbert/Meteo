@@ -15,14 +15,19 @@ public class UrlBuilder {
     private static final String URL_ICON_STOP = ".png";
 
     public URL buildUrl(String cityName, String cityCountry) throws MalformedURLException {
-        String Url = URL_START + "q=" +firstChar2UpperCase(cityName) + "," + firstChar2UpperCase(cityCountry) + "&APPID=" + API_KEY;
+        String Url = URL_START + "q=" +firstChar2UpperCase(cityName) +
+                "," + firstChar2UpperCase(cityCountry) + getEndUrl();
         return new URL(Url);
 
     }
 
     public URL buildUrl(String cityID) throws MalformedURLException{
-        String Url = URL_START + "id=" +cityID + "&APPID=" + API_KEY;
+        String Url = URL_START + "id=" +cityID + getEndUrl();
         return new URL(Url);
+    }
+
+    private String getEndUrl(){
+        return "&units=metric"+ "&APPID=" + API_KEY;
     }
 
     public URL buildIconUrl(String sIconID) throws MalformedURLException {
