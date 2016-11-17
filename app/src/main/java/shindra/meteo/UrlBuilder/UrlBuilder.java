@@ -1,5 +1,7 @@
 package shindra.meteo.UrlBuilder;
 
+import android.location.Location;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -26,16 +28,22 @@ public class UrlBuilder {
         return new URL(Url);
     }
 
+    public URL buildUrl(int latitude, int longitude)throws MalformedURLException {
+
+        String lat = Integer.toString(latitude);
+        String longi = Integer.toString(longitude);
+
+        String Url = URL_START + "lat=" +lat + "lon=" + longi;
+
+        return new URL(Url);
+
+    }
+
     private String getEndUrl(){
         return "&units=metric"+ "&APPID=" + API_KEY;
     }
 
-    public URL buildIconUrl(String sIconID) throws MalformedURLException {
 
-        String sUrl;
-        sUrl = URL_ICON_START + sIconID + URL_ICON_STOP;
-        return new URL(sUrl);
-    }
 
     private String firstChar2UpperCase(String s) {
         String s1 = s.substring(0, 1).toUpperCase();

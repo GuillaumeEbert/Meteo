@@ -2,6 +2,7 @@ package shindra.meteo.UI.GUI;
 
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
@@ -132,6 +133,27 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == RESULT_OK){
+            String cityName = data.getStringExtra(UiSearchCity.CITY_NAME);
+            String cityCountry = data.getExtras().getString(UiSearchCity.CITY_COUNTRY);
+
+            Log.d("ActivityRescityName",cityName);
+            Log.d("ActivityRescityCountry",cityCountry);
+
+            if(cityCountry != null & cityCountry != null){
+                try {
+                    myCitiesManager.buildCity(cityName,cityCountry);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         int btnId = v.getId();
 
@@ -179,30 +201,6 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         startActivityForResult(intent, GUI.SEARCH_NEW_CITY_REQUEST);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(resultCode == RESULT_OK){
-
-
-            String cityName = data.getStringExtra(UiSearchCity.CITY_NAME);
-            String cityCountry = data.getExtras().getString(UiSearchCity.CITY_COUNTRY);
-
-            Log.d("ActivityRescityName",cityName);
-            Log.d("ActivityRescityCountry",cityCountry);
-
-
-            if(cityCountry != null & cityCountry != null){
-                try {
-                    myCitiesManager.buildCity(cityName,cityCountry);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-    }
-
     private void handleLeftNav(){
         int viewPosition = myViewPager.getCurrentItem();
 
@@ -230,8 +228,11 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
 
     private void handleLocalisation(){
         //Get the last update
+        Location lastLocation = myGps.getLastLocation();
 
         //get the city with location
+        if(lastLocation == null) myCitiesManager.buildCity(lastLocation);
+
 
     }
 

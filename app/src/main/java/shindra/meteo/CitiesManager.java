@@ -57,7 +57,7 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
         }
 
     public void buildCity(Location aLocation){
-
+        myCityBuilder.buildCity(aLocation);
     }
 
     public City getCity(String cityName, String cityCountry) {

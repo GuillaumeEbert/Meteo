@@ -1,6 +1,8 @@
 package shindra.meteo;
 
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -61,13 +63,24 @@ public class CityBuilder implements Handler.Callback {
         else initJsonFetcherThread(theUrl2Connect);
     }
 
+    public void buildCity(Location aLocation) throws MalformedURLException {
+
+        int lat = (int) aLocation.getAltitude();
+        int longi = (int) aLocation.getLongitude();
+
+        //Build Json Url
+        URL theUrl2Connect = myUrlBuilder.buildUrl(lat,longi);
+        if(isFetcherWorking) qUrl.add(theUrl2Connect);
+        else initJsonFetcherThread(theUrl2Connect);
+
+    }
+
     private void initJsonFetcherThread(URL urlToConnect){
         isFetcherWorking = true;
         JsonFetcher myJsonFetcher = new JsonFetcher(myHandler, urlToConnect);
         new Thread(myJsonFetcher).start();
 
     }
-
 
     @Override
     public boolean handleMessage(Message inputMessage) {
