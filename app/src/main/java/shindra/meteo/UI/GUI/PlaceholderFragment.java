@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import shindra.meteo.CitiesManager;
 import shindra.meteo.City.City;
 import shindra.meteo.R;
@@ -63,43 +65,22 @@ public class PlaceholderFragment extends Fragment {
         TextView tvCityName = (TextView) rootView.findViewById(R.id.tv_city_name);
         ImageView ivWeatherIcon = (ImageView) rootView.findViewById(R.id.iv_weather_icon);
         TextView tvCityTemp = (TextView) rootView.findViewById(R.id.tv_temp);
-        TextView tvDate = (TextView) rootView.findViewById(R.id.tv_date);
+        TextView tvHumidity = (TextView) rootView.findViewById(R.id.tv_humidity_display);
+        TextView tvDate = (TextView) rootView.findViewById(R.id.tv_date_of_last_upd);
 
         tvCityName.setText(aCity.geName());
         ivWeatherIcon.setImageBitmap(aCity.getWeathers().getIconImg());
         tvCityTemp.setText(Integer.toString(aCity.getTemperature()) +"°c");
-        tvDate.setText(buildDate(Calendar.getInstance(TimeZone.getDefault() )));
-
+        tvHumidity.setText(Integer.toString(aCity.getHumidityPercent())+ "%");
+        tvDate.setText(handleDate(aCity.getDateOfUpdate()));
 
         return rootView;
     }
 
-    private String buildDate(Calendar aCalendar){
-        TimeZone a = aCalendar.getTimeZone();
-        int month = aCalendar.get(Calendar.MONTH);
-        int dayNb = aCalendar.get(Calendar.DAY_OF_MONTH);
-        int hour = aCalendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = aCalendar.get(Calendar.MINUTE);
-        return "Date todo";
+
+    private String handleDate(Double utcDate){
+        String sunrise = new SimpleDateFormat("EEEE, d MMM yyyy HH:mm:ss").format(utcDate*1000);
+        return sunrise;
     }
 
-    private String getDateName(int aDate){
-        switch (aDate){
-            case Calendar.MONDAY:
-                return getResources().getResourceName(R.string.mon);
-            case Calendar.TUESDAY:
-                return getResources().getResourceName(R.string.thu);
-            case Calendar.WEDNESDAY:
-                return getResources().getResourceName(R.string.wen);
-            case Calendar.THURSDAY:
-                return getResources().getResourceName(R.string.thur);
-            case Calendar.FRIDAY:
-                return getResources().getResourceName(R.string.fri);
-            case Calendar.SATURDAY:
-                return getResources().getResourceName(R.string.sat);
-            case Calendar.SUNDAY:
-                return getResources().getResourceName(R.string.sun);
-        }
-        return "oulala";
-    }
 }

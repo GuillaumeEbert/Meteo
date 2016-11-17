@@ -1,5 +1,6 @@
 package shindra.meteo;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -52,6 +53,10 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
 
     public void buildCity(String cityId) throws MalformedURLException {
        myCityBuilder.buildCity(cityId);
+
+        }
+
+    public void buildCity(Location aLocation){
 
     }
 

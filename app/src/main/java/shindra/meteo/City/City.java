@@ -31,6 +31,8 @@ public class City implements Parcelable{
     private String myName;
     @SerializedName("cod")
     private int myCod;
+    @SerializedName("dt")
+    private double myDateOfUpdate;
 
 
     protected City(Parcel in) {
@@ -100,6 +102,11 @@ public class City implements Parcelable{
 
     public int getHumidityPercent(){
         return myMain.getHumidityPercent();
+    }
+
+
+    public double getDateOfUpdate() {
+        return myDateOfUpdate;
     }
 
 

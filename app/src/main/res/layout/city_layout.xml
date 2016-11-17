@@ -18,28 +18,19 @@
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/background_dark" />
 
-    <TextView
-        android:text="dim.13 novembre 14:28"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_date"
-        android:layout_below="@+id/tv_city_name"
-        android:layout_centerHorizontal="true" />
-
-
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/sym_def_app_icon"
         android:id="@+id/iv_weather_icon"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="69dp"
         android:scaleType="matrix"
         android:saveEnabled="false"
         android:scaleX="2.5"
         android:scaleY="2.5"
-        android:layout_marginStart="81dp"
-        android:layout_below="@+id/tv_date"
+        android:layout_marginStart="78dp"
+        android:layout_below="@+id/tv_city_name"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -50,9 +41,39 @@
         android:textSize="50sp"
         android:textColor="@android:color/black"
         android:layout_marginLeft="162dp"
-        android:layout_marginEnd="45dp"
-        android:layout_alignBottom="@+id/iv_weather_icon"
+        android:layout_marginEnd="24dp"
+        android:layout_alignTop="@+id/iv_weather_icon"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="@string/tv_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_temp"
+        android:layout_alignEnd="@+id/iv_weather_icon"
+        android:layout_marginTop="49dp"
+        android:id="@+id/tv_hum"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="95%"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_hum"
+        android:layout_toEndOf="@+id/tv_hum"
+        android:layout_marginStart="12dp"
+        android:id="@+id/tv_humidity_display"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="A date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_date_of_last_upd"
+        android:layout_below="@+id/tv_city_name"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

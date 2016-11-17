@@ -1,32 +1,27 @@
 package shindra.meteo.UI.GUI;
 
-import android.app.Fragment;
+
 import android.content.Intent;
-
-
-
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.ImageButton;
-
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-
 import shindra.meteo.CitiesManager;
 import shindra.meteo.City.City;
 import shindra.meteo.Favoris.Fav;
+import shindra.meteo.GPS.GPS;
 import shindra.meteo.Loader;
 import shindra.meteo.R;
 import shindra.meteo.UI.GUI.UiDisplayCitiesFav.UiDisplayCitiesFav;
 import shindra.meteo.UI.GUI.UiSearchCity.UiSearchCity;
 
-import android.app.FragmentTransaction;
+
 
 public class GUI extends AppCompatActivity implements CitiesManager.CitiesManagerCallback, View.OnClickListener {
 
@@ -48,6 +43,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     private Fav myCityInFav;
     private ImageButton btnLeftNav;
     private ImageButton btnRightNav;
+    private GPS myGps;
 
     public static final int SEARCH_NEW_CITY_REQUEST = 1;  // The request code
 
@@ -55,6 +51,8 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myGps = new GPS(this);
 
         myCityInFav = new Fav(getSharedPreferences(Fav.PREFS_NAME,MODE_PRIVATE));
        // myCityInFav.deleteAllCityFav();
@@ -92,6 +90,8 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         btnRightNav = (ImageButton) (ImageButton) findViewById(R.id.right_nav);
         btnRightNav.setOnClickListener(this);
 
+        myGps.getLastLocation();
+
     }
 
     @Override
@@ -127,6 +127,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         int lastFragmentPos = myCityInFav.getLastFragmentPositionOnDisplayId();
         myViewPager.setCurrentItem(lastFragmentPos);
         displayArrowNav();
+
 
     }
 
@@ -174,28 +175,22 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     }
 
     private void displayUiSearchCity(View v){
-           /*For test only*/
-      /*  try {
-            myCitiesManager.buildCity("Lyon", "France");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }*/
-        Intent intent = new Intent(v.getContext(), UiSearchCity.class);
+         Intent intent = new Intent(v.getContext(), UiSearchCity.class);
         startActivityForResult(intent, GUI.SEARCH_NEW_CITY_REQUEST);
-
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-     Log.d("Test","YOLO");
+
         if(resultCode == RESULT_OK){
 
 
             String cityName = data.getStringExtra(UiSearchCity.CITY_NAME);
             String cityCountry = data.getExtras().getString(UiSearchCity.CITY_COUNTRY);
+
+            Log.d("ActivityRescityName",cityName);
+            Log.d("ActivityRescityCountry",cityCountry);
+
 
             if(cityCountry != null & cityCountry != null){
                 try {
@@ -221,7 +216,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     }
     private void handleRightNav(){
         /*Get nb of position from the view manager*/
-        int nbOfView = myViewPager.getChildCount() -1 ;
+        int nbOfView = mySectionsPagerAdapter.getCount() - 1  ;
         int currentPos = myViewPager.getCurrentItem();
         int nextPos = currentPos+1;
         /*There is a view next this position*/
@@ -231,35 +226,37 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
 
         if(btnLeftNav.getVisibility() == View.INVISIBLE) btnLeftNav.setVisibility(View.VISIBLE);
 
-
-
     }
 
     private void handleLocalisation(){
+        //Get the last update
+
+        //get the city with location
 
     }
 
     private void displayArrowNav(){
-        int nbOfView = myViewPager.getChildCount() -1;
+        int nbOfView = mySectionsPagerAdapter.getCount() - 1 ;
         int currentPos = myViewPager.getCurrentItem();
 
-        if(currentPos == 0 ){
+        if(nbOfView == 0 ){
+            btnLeftNav.setVisibility(View.INVISIBLE);
+            btnRightNav.setVisibility(View.INVISIBLE);
+            return;
+        }else if(currentPos == 0 ){
             btnLeftNav.setVisibility(View.INVISIBLE);
             btnRightNav.setVisibility(View.VISIBLE);
+            return;
         }
-        if(nbOfView == currentPos) {
+        else if(nbOfView == currentPos) {
             btnRightNav.setVisibility(View.INVISIBLE);
             btnLeftNav.setVisibility(View.VISIBLE);
         }
     }
 
 
-
-
-    /*TODO Résolution de bug arrow
-      TODO Géolocalisation
+    /*TODO Géolocalisation
       TODO Supprimer une ville des favories
-      TODO Ajouter l'indication d'humiditer
       TODO Tester les emails
       TODO Traduction en anglais
      */

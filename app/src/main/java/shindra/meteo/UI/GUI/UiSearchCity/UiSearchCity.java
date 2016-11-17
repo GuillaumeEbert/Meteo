@@ -51,7 +51,7 @@ public class UiSearchCity extends AppCompatActivity {
 
 
                 resultIntent.putExtra(CITY_NAME,edCityName.getText().toString());
-                resultIntent.putExtra(CITY_COUNTRY,edCityName.getText().toString());
+                resultIntent.putExtra(CITY_COUNTRY,edCityCountry.getText().toString());
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
 

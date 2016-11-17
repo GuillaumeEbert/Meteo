@@ -27,11 +27,6 @@ public class Fav {
         mySharedPrefEditor = aSharedPreference.edit();
     }
 
-    public void addCityInFavByID(String cityName,int cityId){
-        String sCityId = Integer.toString(cityId);
-        mySharedPrefEditor.putString(cityName,sCityId).commit();
-    }
-
     public void addAllCitiesById(ArrayList<City> cities2Save){
 
         Set<String> i = new HashSet<String>();
