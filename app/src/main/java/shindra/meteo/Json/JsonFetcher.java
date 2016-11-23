@@ -67,7 +67,7 @@ public class JsonFetcher implements Runnable {
         }catch (Exception e){
             e.printStackTrace();
              /*Send Exception file to cityBuilder*/
-            myCityBuilderHandler.obtainMessage(CityBuilder.JSON_READY,e).sendToTarget();
+            myCityBuilderHandler.obtainMessage(CityBuilder.JSON_FETCHER_EXCEPTION,e).sendToTarget();
         }
 
     }

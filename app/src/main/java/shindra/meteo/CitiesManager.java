@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
@@ -24,11 +23,12 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
     private Loader theLoader;
 
 
-    public CitiesManager(GUI aGui, Loader aLoader) {
+    public CitiesManager(GUI aGui,CitiesManagerCallback aCallback ,Loader aLoader) {
         lCity = new ArrayList<City>();
         myCityBuilder = new CityBuilder(this, aGui.getResources());
         theGui = aGui;
         theLoader = aLoader;
+        myCallback=aCallback;
     }
 
     protected CitiesManager(Parcel in) {
@@ -56,7 +56,7 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
 
         }
 
-    public void buildCity(Location aLocation){
+    public void buildCity(Location aLocation) throws MalformedURLException {
         myCityBuilder.buildCity(aLocation);
     }
 
@@ -81,7 +81,7 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
         if (theLoader.isExecuting()) {
             /*add the city to the list*/
             lCity.add(aCity);
-            if (theLoader.hasNext()) theLoader.loadCity();   /*If loader has next, build new city*/
+            if (theLoader.hasNext()) theLoader.loadCities(this);   /*If loader has next, build new city*/
             else {
                 theLoader.setIsExecuting(false);
                 myCallback.loadingCompleted();            /*Loading completed*/
@@ -106,10 +106,6 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
             if (a.getId() == cityId) return true;
         }
         return false;
-    }
-
-    public void setCallBackListener(CitiesManagerCallback aListener) {
-        myCallback = aListener;
     }
 
     @Override

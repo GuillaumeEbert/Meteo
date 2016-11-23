@@ -28,12 +28,12 @@ public class UrlBuilder {
         return new URL(Url);
     }
 
-    public URL buildUrl(int latitude, int longitude)throws MalformedURLException {
+    public URL buildUrl(double latitude, double longitude)throws MalformedURLException {
 
-        String lat = Integer.toString(latitude);
-        String longi = Integer.toString(longitude);
+        String lat = Double.toString(latitude);
+        String longi = Double.toString(longitude);
 
-        String Url = URL_START + "lat=" +lat + "lon=" + longi;
+        String Url = URL_START + "lat=" +lat + "&lon=" + longi+ getEndUrl();
 
         return new URL(Url);
 

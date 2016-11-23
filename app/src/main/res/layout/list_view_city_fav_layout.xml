@@ -20,26 +20,13 @@
             android:textColor="@android:color/background_dark"
             android:textSize="18sp" />
 
-        <ImageButton
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_clear_black_24dp"
-            android:id="@+id/imageButton2"
-            android:background="@android:color/transparent"
+            android:id="@+id/checkBox"
+            android:textSize="14sp"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
-
-        <TextView
-            android:text="Strasbourg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lv_item_tv_city_name"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="35dp"
-            android:layout_alignBottom="@+id/imageButton2"
-            android:layout_toEndOf="@+id/imageButton2" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -47,9 +34,20 @@
             app:srcCompat="@mipmap/ic_launcher"
             android:id="@+id/lv_item_weather_icon"
             android:layout_weight="0.67"
-            android:layout_marginEnd="70dp"
+            android:layout_marginEnd="44dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/lv_item_city_temp" />
+
+        <TextView
+            android:text="Strasbourg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_item_tv_city_name"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:layout_marginStart="46dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/checkBox" />
 
     </RelativeLayout>
 

@@ -79,7 +79,7 @@ public class PlaceholderFragment extends Fragment {
 
 
     private String handleDate(Double utcDate){
-        String sunrise = new SimpleDateFormat("EEEE, d MMM yyyy HH:mm:ss").format(utcDate*1000);
+        String sunrise = new SimpleDateFormat("d MMM yyyy HH:mm:ss").format(utcDate*1000);
         return sunrise;
     }
 

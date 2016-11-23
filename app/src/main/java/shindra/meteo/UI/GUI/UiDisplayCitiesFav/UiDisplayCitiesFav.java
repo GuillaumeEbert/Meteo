@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,9 @@ public class UiDisplayCitiesFav extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_display_cities_fav);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         Intent intent = getIntent();
 
         ArrayList<City> lCities = intent.getParcelableArrayListExtra("CitiesManager");
@@ -32,7 +36,7 @@ public class UiDisplayCitiesFav extends AppCompatActivity {
         CustomAdapter adapter = new CustomAdapter(this, lCities);
         lvCitiesInFav.setAdapter(adapter);
 
-        Log.d("YOLO","YOLO");
+
 
     }
 }

@@ -15,6 +15,7 @@ public class UiSearchCity extends AppCompatActivity {
 
     public static final String CITY_NAME ="cityName";
     public static  final String CITY_COUNTRY ="cityCountry";
+    public static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

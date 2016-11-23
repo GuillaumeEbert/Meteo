@@ -13,10 +13,10 @@
 
     <string name="btn_cancel">Annuler</string>
 
-    <string name ="tv_humidity">Humidité : </string>
+    <string name="tv_humidity">Humidité : </string>
     <string name="tv_last_update_date"> Date de dernière modification : </string>
 
-
-
+    <string name="delete_city">Supprimé</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

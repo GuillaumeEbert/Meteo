@@ -13,7 +13,7 @@ import shindra.meteo.City.City;
  * Created by Guillaume on 13/11/2016.
  */
 
-public class Fav {
+public class FavoritesManager {
 
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_LAST_FRAGMENT_ON_DISPLAY = "last_fragment_on_display";
@@ -22,7 +22,7 @@ public class Fav {
     private SharedPreferences mySharedPreferences;
     private SharedPreferences.Editor mySharedPrefEditor;
 
-    public Fav(SharedPreferences aSharedPreference){
+    public FavoritesManager(SharedPreferences aSharedPreference){
         mySharedPreferences = aSharedPreference;
         mySharedPrefEditor = aSharedPreference.edit();
     }

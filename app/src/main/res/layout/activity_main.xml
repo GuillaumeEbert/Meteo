@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="shindra.meteo.UI.GUI.GUI">
+    tools:context="shindra.meteo.UI.GUI.GUI"
+    android:background="@drawable/radial_gradient">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -47,25 +48,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" >
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_email_black_24dp"
-            android:id="@+id/btn_mail"
-            android:background="@android:color/transparent"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_gps_black_24dp"
-            android:id="@+id/btn_gps"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="35dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/btn_add_city" />
-
         <Button
             android:text="@string/btn_add_city"
             android:layout_width="wrap_content"
@@ -73,7 +55,8 @@
             android:id="@+id/btn_add_city"
             android:background="@android:color/transparent"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/btn_view_cities" />
+            android:layout_toStartOf="@+id/btn_view_cities"
+            android:textColor="@color/app_text_color" />
 
         <Button
             android:text="@string/btn_view_cities"
@@ -82,7 +65,39 @@
             android:id="@+id/btn_view_cities"
             android:background="@android:color/transparent"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/app_text_color" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btn_add_city"
+            android:id="@+id/layoutbtn">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_email_black_24dp"
+                android:id="@+id/btn_mail"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="39dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/btn_add_city" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_gps_black_24dp"
+                android:id="@+id/btn_gps"
+                android:background="@android:color/transparent"
+
+                android:layout_marginEnd="31dp"
+                android:layout_alignTop="@+id/btn_mail"
+                android:layout_toStartOf="@+id/btn_mail" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 </RelativeLayout>

@@ -3,6 +3,7 @@ package shindra.meteo.UI.GUI;
 
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
@@ -11,17 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+
 import shindra.meteo.CitiesManager;
 import shindra.meteo.City.City;
-import shindra.meteo.Favoris.Fav;
+import shindra.meteo.Favoris.FavoritesManager;
 import shindra.meteo.GPS.GPS;
 import shindra.meteo.Loader;
 import shindra.meteo.R;
 import shindra.meteo.UI.GUI.UiDisplayCitiesFav.UiDisplayCitiesFav;
 import shindra.meteo.UI.GUI.UiSearchCity.UiSearchCity;
-
 
 
 public class GUI extends AppCompatActivity implements CitiesManager.CitiesManagerCallback, View.OnClickListener {
@@ -41,7 +43,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     private ViewPager myViewPager;
     private CitiesManager myCitiesManager;
     private Loader myLoader;
-    private Fav myCityInFav;
+    private FavoritesManager myCityInFavoritesManager;
     private ImageButton btnLeftNav;
     private ImageButton btnRightNav;
     private GPS myGps;
@@ -55,12 +57,11 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
 
         myGps = new GPS(this);
 
-        myCityInFav = new Fav(getSharedPreferences(Fav.PREFS_NAME,MODE_PRIVATE));
-       // myCityInFav.deleteAllCityFav();
-        myLoader = new Loader(myCityInFav);
-        myCitiesManager = new CitiesManager(this,myLoader);
-        myCitiesManager.setCallBackListener(this);
-        myLoader.setTheCitiesManager(myCitiesManager);
+        myCityInFavoritesManager = new FavoritesManager(getSharedPreferences(FavoritesManager.PREFS_NAME, MODE_PRIVATE));
+        myCityInFavoritesManager.deleteAllCityFav();
+        myLoader = new Loader(myCityInFavoritesManager);
+        myCitiesManager = new CitiesManager(this, this, myLoader);
+
 
         /*Create the adapter that will return a fragment for each city*/
         mySectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), myCitiesManager);
@@ -69,9 +70,8 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         myViewPager = (ViewPager) findViewById(R.id.container);
         myViewPager.setAdapter(mySectionsPagerAdapter);
 
-        /*Start loading the city in fav*/
-        myLoader.loadCity();
-
+        /*Start loading the cities in fav*/
+        myLoader.loadCities(myCitiesManager);
 
         Button btnAddCity = (Button) findViewById(R.id.btn_add_city);
         btnAddCity.setOnClickListener(this);
@@ -98,66 +98,87 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     @Override
     protected void onStop() {
         super.onStop();
-        myCityInFav.addAllCitiesById(myCitiesManager.getCities());
+        myCityInFavoritesManager.addAllCitiesById(myCitiesManager.getCities());
 
-        /*Search the focus view*/
+        /*Search the view in focus*/
         int viewPosition = myViewPager.getCurrentItem();
         /*Saved it to the sharedPreference*/
-        myCityInFav.addLastFragmentPositionOnDisplay(viewPosition);
+        myCityInFavoritesManager.addLastFragmentPositionOnDisplay(viewPosition);
 
     }
 
+    /**
+     * Call back from the citiesManager containing a new city
+     * @param newCityBuild
+     */
     @Override
     public void newCityAvailable(City newCityBuild) {
         /*A new city is available*/
-        /*Update the myViewPager*/
+
+        /*Notify the view pager to add a new fragment*/
         myViewPager.getAdapter().notifyDataSetChanged();
-        myViewPager.setCurrentItem(myCitiesManager.getCities().size()-1);
+        /*Put the new fragment in focus*/
+        myViewPager.setCurrentItem(myCitiesManager.getCities().size() - 1);
+
+        /*handle the navigation arrows*/
         displayArrowNav();
 
     }
 
+    /**
+     *
+     */
     @Override
     public void loadingCompleted() {
         Log.d("GUI", "Callback loading completed");
-        /*Find the last city on display*/
 
         /*update the GUI with all the city*/
         myViewPager.getAdapter().notifyDataSetChanged();
+
         /*Put the last city on display in focus*/
-        int lastFragmentPos = myCityInFav.getLastFragmentPositionOnDisplayId();
+        int lastFragmentPos = myCityInFavoritesManager.getLastFragmentPositionOnDisplayId();
         myViewPager.setCurrentItem(lastFragmentPos);
+
+        /*handle the navigation arrows*/
         displayArrowNav();
 
+    }
 
+    private void displayUiSearchCity(View v) {
+        Intent intent = new Intent(v.getContext(), UiSearchCity.class);
+        startActivityForResult(intent, UiSearchCity.REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /* Result from activity*/
 
-        if(resultCode == RESULT_OK){
-            String cityName = data.getStringExtra(UiSearchCity.CITY_NAME);
-            String cityCountry = data.getExtras().getString(UiSearchCity.CITY_COUNTRY);
+        if (requestCode == UiSearchCity.REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
 
-            Log.d("ActivityRescityName",cityName);
-            Log.d("ActivityRescityCountry",cityCountry);
+                String cityName = data.getStringExtra(UiSearchCity.CITY_NAME);
+                String cityCountry = data.getExtras().getString(UiSearchCity.CITY_COUNTRY);
 
-            if(cityCountry != null & cityCountry != null){
-                try {
-                    myCitiesManager.buildCity(cityName,cityCountry);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                if (cityCountry != null & cityCountry != null) {
+                    try {
+                        myCitiesManager.buildCity(cityName, cityCountry);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
         }
     }
 
+    /**
+     * Handle the click for all the buttons on the GUI
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         int btnId = v.getId();
 
-        switch (btnId){
+        switch (btnId) {
             case R.id.btn_mail:
                 sendMailCityOnDisplay();
                 break;
@@ -183,12 +204,19 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         }
     }
 
-    private void sendMailCityOnDisplay(){
-        /*Todo*/
+    private void sendMailCityOnDisplay() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
-    private void displayUiCitiesInFav(View v){
-        /*Open the activity to show the city in fav*/
+    /**
+     * Open the activity that will handle the favorites
+     * @param v
+     */
+    private void displayUiCitiesInFav(View v) {
         Intent it = new Intent(v.getContext(), UiDisplayCitiesFav.class);
         ArrayList<City> test = myCitiesManager.getCities();
         it.putParcelableArrayListExtra("CitiesManager", test);
@@ -196,69 +224,66 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
 
     }
 
-    private void displayUiSearchCity(View v){
-         Intent intent = new Intent(v.getContext(), UiSearchCity.class);
-        startActivityForResult(intent, GUI.SEARCH_NEW_CITY_REQUEST);
-    }
 
-    private void handleLeftNav(){
+
+    private void handleLeftNav() {
         int viewPosition = myViewPager.getCurrentItem();
 
         /*Is not at index zeros*/
-        if(viewPosition > 0 ) myViewPager.setCurrentItem(viewPosition -1);
+        if (viewPosition > 0) myViewPager.setCurrentItem(viewPosition - 1);
 
-        if((viewPosition - 1 == 0)) btnLeftNav.setVisibility(View.INVISIBLE);
+        if ((viewPosition - 1 == 0)) btnLeftNav.setVisibility(View.INVISIBLE);
 
-        if(btnRightNav.getVisibility() == View.INVISIBLE) btnRightNav.setVisibility(View.VISIBLE);
+        if (btnRightNav.getVisibility() == View.INVISIBLE) btnRightNav.setVisibility(View.VISIBLE);
 
     }
-    private void handleRightNav(){
+
+    private void handleRightNav() {
         /*Get nb of position from the view manager*/
-        int nbOfView = mySectionsPagerAdapter.getCount() - 1  ;
+        int nbOfView = mySectionsPagerAdapter.getCount() - 1;
         int currentPos = myViewPager.getCurrentItem();
-        int nextPos = currentPos+1;
+        int nextPos = currentPos + 1;
         /*There is a view next this position*/
-        if(nextPos <= nbOfView) myViewPager.setCurrentItem(nextPos);
+        if (nextPos <= nbOfView) myViewPager.setCurrentItem(nextPos);
 
-        if(nextPos == nbOfView) btnRightNav.setVisibility(View.INVISIBLE);
+        if (nextPos == nbOfView) btnRightNav.setVisibility(View.INVISIBLE);
 
-        if(btnLeftNav.getVisibility() == View.INVISIBLE) btnLeftNav.setVisibility(View.VISIBLE);
+        if (btnLeftNav.getVisibility() == View.INVISIBLE) btnLeftNav.setVisibility(View.VISIBLE);
 
     }
 
-    private void handleLocalisation(){
+    private void handleLocalisation() {
         //Get the last update
         Location lastLocation = myGps.getLastLocation();
 
         //get the city with location
-        if(lastLocation == null) myCitiesManager.buildCity(lastLocation);
-
-
+        if (lastLocation != null) try {
+            myCitiesManager.buildCity(lastLocation);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void displayArrowNav(){
-        int nbOfView = mySectionsPagerAdapter.getCount() - 1 ;
+    private void displayArrowNav() {
+        int nbOfView = mySectionsPagerAdapter.getCount() - 1;
         int currentPos = myViewPager.getCurrentItem();
 
-        if(nbOfView == 0 ){
+        if (nbOfView == 0) {
             btnLeftNav.setVisibility(View.INVISIBLE);
             btnRightNav.setVisibility(View.INVISIBLE);
             return;
-        }else if(currentPos == 0 ){
+        } else if (currentPos == 0) {
             btnLeftNav.setVisibility(View.INVISIBLE);
             btnRightNav.setVisibility(View.VISIBLE);
             return;
-        }
-        else if(nbOfView == currentPos) {
+        } else if (nbOfView == currentPos) {
             btnRightNav.setVisibility(View.INVISIBLE);
             btnLeftNav.setVisibility(View.VISIBLE);
         }
     }
 
 
-    /*TODO Géolocalisation
+      /*
       TODO Supprimer une ville des favories
-      TODO Tester les emails
-      TODO Traduction en anglais
      */
 }

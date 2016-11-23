@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Queue;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import shindra.meteo.City.City;
@@ -65,11 +66,8 @@ public class CityBuilder implements Handler.Callback {
 
     public void buildCity(Location aLocation) throws MalformedURLException {
 
-        int lat = (int) aLocation.getAltitude();
-        int longi = (int) aLocation.getLongitude();
-
         //Build Json Url
-        URL theUrl2Connect = myUrlBuilder.buildUrl(lat,longi);
+        URL theUrl2Connect = myUrlBuilder.buildUrl(aLocation.getLatitude(),aLocation.getLongitude());
         if(isFetcherWorking) qUrl.add(theUrl2Connect);
         else initJsonFetcherThread(theUrl2Connect);
 
@@ -113,9 +111,13 @@ public class CityBuilder implements Handler.Callback {
                 break;
 
             case JSON_FETCHER_EXCEPTION:
+                Exception e = (Exception) inputMessage.obj;
+                e.printStackTrace();
                 break;
 
             case DESERIALIZER_EXCEPTION:
+                Exception y = (Exception) inputMessage.obj;
+                y.printStackTrace();
                 break;
 
 
