@@ -1,6 +1,8 @@
 package shindra.meteo.Favoris;
 
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +15,7 @@ import shindra.meteo.City.City;
  * Created by Guillaume on 13/11/2016.
  */
 
-public class FavoritesManager {
+public class FavoritesManager  {
 
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_LAST_FRAGMENT_ON_DISPLAY = "last_fragment_on_display";
@@ -66,6 +68,7 @@ public class FavoritesManager {
     public void deleteAllCityFav(){
         mySharedPrefEditor.clear().commit();
     }
+
 
 
 

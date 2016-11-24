@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import shindra.meteo.City.City;
 import shindra.meteo.UI.GUI.GUI;
@@ -15,6 +16,7 @@ import shindra.meteo.UI.GUI.GUI;
  */
 
 public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelable {
+
 
     private ArrayList<City> lCity;
     private CityBuilder myCityBuilder;
@@ -74,6 +76,7 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
     }
 
 
+
     @Override
     public void cityConstructed(City aCity) {
 
@@ -100,6 +103,11 @@ public class CitiesManager implements CityBuilder.CityBuilderCallback, Parcelabl
             }
         }
     }
+
+    public void setCities(ArrayList<City> lCity) {
+        this.lCity = lCity;
+    }
+
 
     private boolean checkIfCityExist(int cityId) {
         for (City a : lCity) {

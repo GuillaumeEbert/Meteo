@@ -168,6 +168,12 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
                 }
             }
         }
+
+        if(requestCode == UiDisplayCitiesFav.REQUEST_CODE){
+            ArrayList<City> lCities = data.getExtras().getParcelableArrayList("newCities");
+
+            Log.d("test","test");
+        }
     }
 
     /**
@@ -220,7 +226,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         Intent it = new Intent(v.getContext(), UiDisplayCitiesFav.class);
         ArrayList<City> test = myCitiesManager.getCities();
         it.putParcelableArrayListExtra("CitiesManager", test);
-        startActivity(it);
+        startActivityForResult(it,UiDisplayCitiesFav.REQUEST_CODE);
 
     }
 

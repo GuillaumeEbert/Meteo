@@ -1,14 +1,18 @@
 package shindra.meteo.UI.GUI.UiDisplayCitiesFav;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import shindra.meteo.City.City;
 import shindra.meteo.R;
@@ -17,12 +21,15 @@ public class CustomAdapter extends BaseAdapter {
 
     private ArrayList<City> mylCities;
     private LayoutInflater _layoutInflater;
+    private City aCity;
+    ListView aListView;
 
-    public CustomAdapter(Context context, ArrayList<City> arrayList) {
+    public CustomAdapter(Context context, ArrayList<City> arrayList, ListView aListView) {
 
         mylCities = arrayList;
         //get the layout inflater
         _layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.aListView= aListView;
     }
 
     @Override
@@ -48,7 +55,7 @@ public class CustomAdapter extends BaseAdapter {
 
         }
 
-        City aCity = mylCities.get(position);
+        aCity = mylCities.get(position);
 
         if (aCity != null) {
 
@@ -62,7 +69,34 @@ public class CustomAdapter extends BaseAdapter {
 
         }
 
+
+        final ImageButton deleteButton = (ImageButton) view.findViewById(R.id.ib_delete);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                deleteCity(aCity);
+               notifyDataSetChanged();
+
+            }
+        });
+
         return view;
+    }
+
+
+    public ArrayList<City> getMylCities() {
+        return mylCities;
+    }
+
+    void deleteCity(City aCity){
+        Iterator i = mylCities.iterator();
+
+        for(City a : mylCities){
+            if(a.getId() == aCity.getId()) mylCities.remove(a);
+        }
+
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import shindra.meteo.Favoris.FavoritesManager;
+import shindra.meteo.GPS.GPS;
 
 /**
  * Created by Guillaume on 14/11/2016.
@@ -25,8 +26,10 @@ public class Loader{
         lCitiesIdInFav = theCitiesInFavoritesManager.getCityInFavByID();
         iterator = lCitiesIdInFav.iterator();
 
+
         /*Fav exist ? */
         if(iterator.hasNext()) isExecuting = true;
+
     }
 
     public void loadCities(CitiesManager aCitiesManager){

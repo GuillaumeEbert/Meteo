@@ -45,8 +45,7 @@ public class UiSearchCity extends AppCompatActivity {
                 EditText edCityName = (EditText) findViewById(R.id.et_city_name);
                 EditText edCityCountry = (EditText) findViewById(R.id.et_city_country);
 
-                Bundle aBundle = new Bundle();
-                //aBundle.putString("city_name",edCityName.getText().toString());
+
 
                 Intent resultIntent = new Intent();
 
