@@ -58,7 +58,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         myGps = new GPS(this);
 
         myCityInFavoritesManager = new FavoritesManager(getSharedPreferences(FavoritesManager.PREFS_NAME, MODE_PRIVATE));
-        myCityInFavoritesManager.deleteAllCityFav();
+        //myCityInFavoritesManager.deleteAllCityFav();
         myLoader = new Loader(myCityInFavoritesManager);
         myCitiesManager = new CitiesManager(this, this, myLoader);
 
@@ -151,6 +151,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         /* Result from activity*/
 
         if (requestCode == UiSearchCity.REQUEST_CODE) {
@@ -170,7 +171,20 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         }
 
         if(requestCode == UiDisplayCitiesFav.REQUEST_CODE){
-            ArrayList<City> lCities = data.getExtras().getParcelableArrayList("newCities");
+
+            Bundle a = data.getBundleExtra("newCities");
+
+            /*Get new city list*/
+            ArrayList<City> lCities = a.getParcelableArrayList("newCities") ;
+
+            /*Delete all the fav*/
+            myCityInFavoritesManager.deleteAllCityFav();
+            myCityInFavoritesManager.addAllCitiesById(lCities); /*Refav the new city list*/
+
+            myCitiesManager.setCities(lCities); /*Redo the city manager with the new cities*/
+
+            myViewPager.getAdapter().notifyDataSetChanged(); /*Update UI*/
+            displayArrowNav();
 
             Log.d("test","test");
         }
@@ -226,7 +240,7 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
         Intent it = new Intent(v.getContext(), UiDisplayCitiesFav.class);
         ArrayList<City> test = myCitiesManager.getCities();
         it.putParcelableArrayListExtra("CitiesManager", test);
-        startActivityForResult(it,UiDisplayCitiesFav.REQUEST_CODE);
+        startActivityForResult(it, UiDisplayCitiesFav.REQUEST_CODE);
 
     }
 
@@ -289,7 +303,5 @@ public class GUI extends AppCompatActivity implements CitiesManager.CitiesManage
     }
 
 
-      /*
-      TODO Supprimer une ville des favories
-     */
+
 }

@@ -50,21 +50,29 @@ public class UiDisplayCitiesFav extends AppCompatActivity {
 
         ArrayList<City> newlCities = adapter.getMylCities();
 
-        Bundle a = new Bundle();
+        /*Bundle a = new Bundle();
         a.putParcelableArrayList("Test" ,newlCities);
 
-        resultIntent.putExtra("Bundle", a);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+       // resultIntent.putExtra("Bundle", a);
+        resultIntent.putExtra("TEST", "TEST");
+        setResult(Activity.RESULT_OK, resultIntent);*/
+        //finish();
 
 
     }
 
     @Override
-    protected void onStop(){
+    public void onBackPressed() {
+        Bundle bundle = new Bundle();
+        Intent mIntent = new Intent();
 
+        ArrayList<City> newlCities = adapter.getMylCities();
 
+        bundle.putParcelableArrayList("newCities", newlCities);
 
+        mIntent.putExtra("newCities",bundle);
+        setResult(RESULT_OK, mIntent);
+        super.onBackPressed();
     }
 }
 

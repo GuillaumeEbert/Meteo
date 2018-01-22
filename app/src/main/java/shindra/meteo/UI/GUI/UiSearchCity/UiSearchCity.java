@@ -45,13 +45,17 @@ public class UiSearchCity extends AppCompatActivity {
                 EditText edCityName = (EditText) findViewById(R.id.et_city_name);
                 EditText edCityCountry = (EditText) findViewById(R.id.et_city_country);
 
+                String country = edCityCountry.getText().toString();
+                String city = edCityName.getText().toString();
 
 
                 Intent resultIntent = new Intent();
 
+                if(country == null ) country = "";
+                if(city == null ) city ="";
 
-                resultIntent.putExtra(CITY_NAME,edCityName.getText().toString());
-                resultIntent.putExtra(CITY_COUNTRY,edCityCountry.getText().toString());
+                resultIntent.putExtra(CITY_NAME,city);
+                resultIntent.putExtra(CITY_COUNTRY,country);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
 
